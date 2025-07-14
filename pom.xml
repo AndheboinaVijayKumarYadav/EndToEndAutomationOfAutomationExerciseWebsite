@@ -41,19 +41,6 @@
       <version>2.29.1</version>
     </dependency>
 
-    <!-- ✅ ReportNG (excluding old testng) -->
-    <dependency>
-      <groupId>org.uncommons</groupId>
-      <artifactId>reportng</artifactId>
-      <version>1.1.4</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.testng</groupId>
-          <artifactId>testng</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
 
     <!-- ✅ Log4j stable (replaced beta) -->
     <dependency>
