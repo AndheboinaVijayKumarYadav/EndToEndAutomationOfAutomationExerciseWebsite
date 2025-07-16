@@ -6,13 +6,15 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 
+import java.net.MalformedURLException;
+
 public class BaseTest {
 
     protected WebDriver driver;
 
     @Parameters({"browser"})
     @BeforeMethod
-    public void setUp(String browser) {
+    public void setUp(String browser) throws MalformedURLException {
         // Initialize browser base on browser value in properties file
         DriverManager.initDriver(browser);
 

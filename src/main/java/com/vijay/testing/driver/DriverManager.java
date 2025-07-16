@@ -10,6 +10,10 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class DriverManager {
 
@@ -24,12 +28,16 @@ public class DriverManager {
         return driver.get();
     }
 
-    public static void initDriver(String browser){
+    public static void initDriver(String browser) throws MalformedURLException {
 
+//        Reading the browser value form testng
 //        String browser = PropertyReader.readKey("browser");
 
+        // setting the url for grid
+        URL gridUrl = new URL("http://localhost:4444/wd/hub");
+
         if(browser == null){
-            throw new RuntimeException("Browser type not specified in properties file.");
+            throw new RuntimeException("Browser type was not provided to DriverManager.");
         }
 
         WebDriver webDriver = null;
@@ -39,28 +47,40 @@ public class DriverManager {
             case "edge":
                 EdgeOptions edgeOptions = new EdgeOptions();
                 edgeOptions.addArguments("--start-maximized");
-//                edgeOptions.addArguments("--headless");
-                webDriver = new EdgeDriver(edgeOptions);
+                edgeOptions.addArguments("--headless");
+
+//                below line is for general initialization
+//                webDriver = new EdgeDriver(edgeOptions);
+
+                webDriver = new RemoteWebDriver(gridUrl,edgeOptions);
                 logger.info("Edge browser initialized");
                 break;
 
             case "chrome":
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--start-maximized");
-//                chromeOptions.addArguments("--headless");
-                webDriver = new ChromeDriver(chromeOptions);
+                chromeOptions.addArguments("--headless");
+
+//                webDriver = new ChromeDriver(chromeOptions);
+
+                webDriver = new RemoteWebDriver(gridUrl,chromeOptions);
                 logger.info("Chrome browser initialized ");
                 break;
 
             case "firefox":
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
                 firefoxOptions.addArguments("--start-maximized");
-                webDriver = new FirefoxDriver(firefoxOptions);
-                logger.info("Firefor browser initialized");
+                firefoxOptions.addArguments("--headless");
+
+//                webDriver = new FirefoxDriver(firefoxOptions);
+
+                webDriver = new RemoteWebDriver(gridUrl,firefoxOptions);
+                logger.info("Firefox browser initialized");
                 break;
 
             default:
                 logger.error("No valid browser value found, Check data.properties file");
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
 
 
         }
