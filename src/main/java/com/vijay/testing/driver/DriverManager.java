@@ -34,7 +34,7 @@ public class DriverManager {
 //        String browser = PropertyReader.readKey("browser");
 
         // setting the url for grid
-        URL gridUrl = new URL("http://localhost:4444/wd/hub");
+        URL gridUrl = new URL("http://localhost:4444");
 
         if(browser == null){
             throw new RuntimeException("Browser type was not provided to DriverManager.");

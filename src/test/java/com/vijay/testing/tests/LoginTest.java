@@ -6,6 +6,7 @@ import com.vijay.testing.pages.AccountPage;
 import com.vijay.testing.pages.HomePage;
 import com.vijay.testing.pages.LoginPage;
 import com.vijay.testing.utils.ExcelUtils;
+import com.vijay.testing.utils.ExtentReportManager;
 import com.vijay.testing.utils.PropertyReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,8 +50,12 @@ public class LoginTest extends BaseTest {
 
     @Test(dataProvider = "LoginData")
     public void testUserLogin(String username,String password){
-        String url = PropertyReader.readKey("url");
 
+        logger.info("Login Test is started");
+        test = ExtentReportManager.createTest("Login Test");
+
+        String url = PropertyReader.readKey("url");
+        test.info("Navigating to URL");
         if(url != null && !url.isEmpty()){
             DriverManager.getDriver().get(url);
         }
@@ -58,19 +63,26 @@ public class LoginTest extends BaseTest {
             throw new RuntimeException("Base URL is missing or empty in data.properties");
         }
 
+
+        test.info("Navigating to Home Page");
         // Initialize HomePage object
         HomePage homePage = new HomePage(DriverManager.getDriver());
 
+        test.info("Navigating to Login page");
         //Initialize LoginPage object
         LoginPage loginPage = homePage.navigateToLoginPage();
         logger.info("Navigated to Login page");
 
+        test.info("Verifying the login url");
         String actualLoginUrl = loginPage.getUrl(DriverManager.getDriver());
         String expectedLoginUrl = PropertyReader.readKey("login-url");
         assertThat(actualLoginUrl).overridingErrorMessage("Actual Login Url is not matching with Expected").isEqualTo(expectedLoginUrl);
+        logger.info("Login url is verified");
 
-
+        test.info("Navigating to Account to login with credentials reading from excel");
         AccountPage accountPage = loginPage.loginIntoAccount(username,password);
+
+        test.pass("Login Successful");
 
     }
 }
